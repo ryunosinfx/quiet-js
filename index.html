@@ -14,6 +14,18 @@ a[target="_blank"]:after {
 	margin: 0px 3px;
 	font-weight: 900;
 }
+
+.menu-selected{background:#FFFFDD}
+.lang-selected{background:#EEEEFF}
+
+h2{border-left:10px solid #ccccff;padding-left:5px;text-align:left}
+a{color: #0876c8;}
+
+.byte{font-size:12pt}
+.sub{font-size:9pt}
+
+.dropOver{background:#EEF;border:3px solid dotte}
+
 </style>
 <meta name="viewport" content="width=device-width,initial-scale=0.8,user-scalable=yes">
 <meta charset="utf-8">
@@ -32,10 +44,7 @@ $(function(){
 			$( deferred.resolve );
 		})
 	).done(function(){
-		console.log("done");
-
 		show_MICAlert();
-
 	});
 });
 
@@ -54,16 +63,6 @@ file2audio demo v5</h2>
 <a value="recv" class="menu" href=#>RecieveONLY</a>
 </center>
 </div>
-<style>
-.menu-selected{background:#FFFFDD}
-.lang-selected{background:#EEEEFF}
-
-h2{border-left:10px solid #ccccff;padding-left:5px;text-align:left}
-a{color: #0876c8;}
-</style>
-<style>
-.dropOver{background:#EEF;border:3px solid dotte}
-</style>
 
 <center>
 
@@ -71,7 +70,8 @@ a{color: #0876c8;}
 <div class="hidden" data-quiet-profile-name="audible"></div>
 <div class="wrapper">
 <header>
-<h2>1.Send:<sendbyte class=byte></sendbyte></h2>
+<h2>1.Send:</h2>
+<div class=byte><sendbyte></sendbyte>&nbsp;</div>
 </header>
 <section>
 <div class="hidden" data-quiet-warning></div>
@@ -93,15 +93,12 @@ a{color: #0876c8;}
 </section>
 </div>
 </div>
-<style>
-.sub{font-size:9pt}
-.byte{color:#999;font-size:10pt}
-</style>
 <div class="box box-recv">
 <div class="hidden" data-quiet-profile-name="audible"></div>
 <div class="wrapper">
 <header>
-<h2>2.Recieve<recvbyte class=byte></recvbyte></h2>
+<h2>2.Recieve</h2>
+<div class=byte><recvbyte></recvbyte>&nbsp;</div>
 </header>
 <section>
 <div class="hidden" data-quiet-warning></div>
@@ -114,7 +111,7 @@ a{color: #0876c8;}
 
 <div class="box-dl" align=center>
 
-<h2>3.DownLoad:<recvbyte class=byte></recvbyte></h2>
+<h2>3.DownLoad:</h2>
 <div style="margin-top:20px"><button class=download type=button><span class="fas fa-download"></span>DownLoad</button></div>
 <div class=sub><font size=2>* Click when the "Recieve" process is completed</font></div>
 </div>
