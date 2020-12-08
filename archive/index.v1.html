@@ -1,0 +1,214 @@
+
+<!doctype html>
+<html>
+<head>
+<style>
+body {font-family: sans-serif ;}
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=0.8,user-scalable=yes">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>text2audio sample</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="/quiet/quiet.js?v11607393330"></script>
+<script async type="text/javascript" src="/quiet/quiet-emscripten.js?v3"></script>
+</head>
+<body>
+<h1>audio2text sample</h2>
+<div>
+text版 | <a href=/index.v2.cgi>file版</a>
+</div>
+<a href=?>すべて</a> |
+<a href=?page=r>受信のみ</a> |
+<a href=?page=s>送信のみ</a>
+<hr>
+<script>
+
+$(function(){
+	sendInit();
+})
+	function sendInit(){
+
+	return (function() {
+    Quiet.init({
+        profilesPrefix: "/quiet/",
+        memoryInitializerPrefix: "/quiet/",
+        libfecPrefix: "/quiet/"
+    });
+    var btn;
+    var textbox;
+    var warningbox;
+    var transmit;
+
+    function onTransmitFinish() {
+        textbox.focus();
+        btn.addEventListener('click', onClick, false);
+        btn.disabled = false;
+        var originalText = btn.innerText;
+        btn.innerText = btn.getAttribute('data-quiet-sending-text');
+        btn.setAttribute('data-quiet-sending-text', originalText);
+        
+        if($(".loop").is(":checked")){
+	        setTimeout(function(){
+	        	btn.click();
+	        },500);
+	      }
+        
+    };
+
+    function onClick(e) {
+        e.target.removeEventListener(e.type, arguments.callee);
+        e.target.disabled = true;
+        var originalText = e.target.innerText;
+        e.target.innerText = e.target.getAttribute('data-quiet-sending-text');
+        e.target.setAttribute('data-quiet-sending-text', originalText);
+        var payload = textbox.value;
+        if (payload === "") {
+            onTransmitFinish();
+            return;
+        }
+        transmit.transmit(Quiet.str2ab(payload));
+    };
+
+    function onQuietReady() {
+        var profilename = document.querySelector('[data-quiet-profile-name]').getAttribute('data-quiet-profile-name');
+        transmit = Quiet.transmitter({profile: profilename, onFinish: onTransmitFinish});
+        btn.addEventListener('click', onClick, false);
+    };
+
+    function onQuietFail(reason) {
+        console.log("quiet failed to initialize: " + reason);
+        warningbox.classList.remove("hidden");
+        warningbox.textContent = "Sorry, it looks like there was a problem with this example (" + reason + ")";
+    };
+
+    function onDOMLoad() {
+        btn = document.querySelector('[data-quiet-send-button]');
+        textbox = document.querySelector('[data-quiet-text-input]');
+        warningbox = document.querySelector('[data-quiet-warning]');
+        Quiet.addReadyCallback(onQuietReady, onQuietFail);
+    };
+
+    onDOMLoad();
+})();
+
+
+	}
+	
+
+
+</script>
+<div class="hidden" data-quiet-profile-name="audible"></div>
+<div class="wrapper">
+<header>
+<h1>送信：</h1>
+</header>
+<section>
+<div class="hidden" data-quiet-warning></div>
+<div class="form-group">
+<textarea autocapitalize="none" autocomplete="off" spellcheck="off" class="form-control" style="resize:none" rows="5" cols=50 data-quiet-text-input>吾輩わがはいは猫である。名前はまだ無い。
+　どこで生れたかとんと見当けんとうがつかぬ。何でも薄暗いじめじめした所でニャーニャー泣いていた事だけは記憶している。</textarea>
+<div><font size=2>※送信したい文字を自由入力↑</font></div>
+</div>
+<button type="button" class="btn btn-default" style="width:50%" data-quiet-send-button data-quiet-sending-text="Sending...">音声エンコード開始</button>
+<label><input type=checkbox class=loop>ループ処理</label>
+</section>
+</div>
+<div class="hidden" data-quiet-profile-name="audible"></div>
+<div class="wrapper">
+<header>
+<h1>受信：</h1>
+</header>
+<section>
+<div class="hidden" data-quiet-warning></div>
+<textarea class=recv cols=50 rows=5 readonly data-quiet-receive-text-target></textarea>
+</section>
+</div>
+<font size=2>※マイクで音を拾うとここに入る↑</font>
+<script>
+
+$(function(){
+
+	var fg = $("<div style='position:fixed;top:0px;left:0px;background:rgba(0,0,0,.3);width:100%;height:100%;text-align:center'></div>");
+	$("body").append(fg);
+	
+	fg.append("<div style='margin-top:100px;display:inline-block;padding:10px;background:white'>ミンミーンという蝉のような音を<br>マイクを近づけて受信してね。<div><input style='margin:10px' type=button class=recv_button value='はい'></div></div>");
+
+	$(document).on("click",".recv_button",function(){
+	
+		$(fg).remove();
+		recvInit();
+	})
+
+	$("body").bind("receieve",function(e,val){
+		$(".recv").val(val);
+	});
+
+})
+
+
+
+function recvInit(){
+
+(function() {
+    Quiet.init({
+        profilesPrefix: "/quiet/",
+        memoryInitializerPrefix: "/quiet/",
+        libfecPrefix: "/quiet/"
+    });
+    var target;
+    var content = new ArrayBuffer(0);
+    var warningbox;
+
+    function onReceive(recvPayload) {
+        content = Quiet.mergeab(content, recvPayload);
+        //target.textContent = Quiet.ab2str(content);
+				console.log(Quiet.ab2str(content));
+				$("body").trigger("receieve",Quiet.ab2str(content));
+        warningbox.classList.add("hidden");
+    };
+
+    function onReceiverCreateFail(reason) {
+        console.log("failed to create quiet receiver: " + reason);
+        warningbox.classList.remove("hidden");
+        warningbox.textContent = "マイクを許可してね。chromeを使ってね。"
+    };
+
+    function onReceiveFail(num_fails) {
+        warningbox.classList.remove("hidden");
+        warningbox.textContent = "Error:音量をもうちょいあげてね。。"
+    };
+
+    function onQuietReady() {
+        var profilename = document.querySelector('[data-quiet-profile-name]').getAttribute('data-quiet-profile-name');
+        Quiet.receiver({profile: profilename,
+             onReceive: onReceive,
+             onCreateFail: onReceiverCreateFail,
+             onReceiveFail: onReceiveFail
+        });
+    };
+
+    function onQuietFail(reason) {
+        console.log("quiet failed to initialize: " + reason);
+        warningbox.classList.remove("hidden");
+        warningbox.textContent = "なんかへん.. (" + reason + ")";
+    };
+
+    function onDOMLoad() {
+        target = document.querySelector('[data-quiet-receive-text-target]');
+        warningbox = document.querySelector('[data-quiet-warning]');
+        Quiet.addReadyCallback(onQuietReady, onQuietFail);
+    };
+
+		onDOMLoad();
+
+})();
+	}
+</script>
+<hr>
+powered <a target=_blank href=https://quiet.github.io/quiet-js/>quiet-js</a>
+(<a href="https://quiet.github.io/quiet/">Docs</a>)
+</body>
+</html>
+</body>
+</html>
