@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html>
 <head>
@@ -18,15 +19,14 @@ a[target="_blank"]:after {
 <meta name="viewport" content="width=device-width,initial-scale=0.8,user-scalable=yes">
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
-<title>file2audio demo</title>
-
+<title>file2audio Demo</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
 $(function(){
 	$.when(
-		$.getScript( "lib/quiet-js/quiet.js" ),
-		$.getScript( "lib/quiet-js/quiet-emscripten.js" ),
-		$.getScript( "lib/main.js" ),
+		$.getScript( "/quiet-js/lib/quiet-js/quiet.js" ),
+		$.getScript( "/quiet-js/lib/quiet-js/quiet-emscripten.js" ),
+		$.getScript( "/quiet-js/lib/main.js" ),
 		$.Deferred(function( deferred ){
 			$( deferred.resolve );
 		})
@@ -36,18 +36,16 @@ $(function(){
 });
 
 </script>
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-
 </head>
 <body>
 <h1 style="padding:3px;margin-top:0px;margin-bottom:5px;background:#000;color:white;padding:3px">
-file2audio demo v5</h2>
+file2audio Demo</h2>
 <div>
 <center>
-<a value="all" class="menu menu-selected" href=#>ALL</a> |
-<a value="send" class="menu" href=#>SendONLY</a> |
-<a value="recv" class="menu" href=#>RecieveONLY</a>
+<a value="all" class="menu menu-selected" href=#>すべて</a> |
+<a value="send" class="menu" href=#>送信のみ</a> |
+<a value="recv" class="menu" href=#>受信のみ</a>
 </center>
 </div>
 <style>
@@ -59,29 +57,28 @@ a{color: #0876c8;}
 <style>
 .dropOver{background:#EEF;border:3px solid dotte}
 </style>
-
 <center>
-
 <div class="box box-send" class="drop_area">
 <div class="hidden" data-quiet-profile-name="audible"></div>
 <div class="wrapper">
 <header>
-<h2>1.Send:<sendbyte class=byte></sendbyte></h2>
+<h2>1.送信：<sendbyte class=byte></sendbyte></h2>
 </header>
 <section>
 <div class="hidden" data-quiet-warning></div>
 <div class="form-group">
-<textarea placeholder="Input Texts, Files, Drag&Drop" class=send_tt autocapitalize="none" autocomplete="off" spellcheck="off" class="form-control" style="resize:none" rows="10" cols=50 data-quiet-text-input></textarea>
+<textarea placeholder="送りたいテキストをここに入力。
+又はファイル選択 or ドラッグ＆ドロップ" class=send_tt autocapitalize="none" autocomplete="off" spellcheck="off" class="form-control" style="resize:none" rows="10" cols=50 data-quiet-text-input></textarea>
 <div>
-<span style='cursor:pointer' class=fileSelect><font size=4><span class="fas fa-file-upload"></span></font><font size=2> Select File</font></span>
+<span style='cursor:pointer' class=fileSelect><font size=4><span class="fas fa-file-upload"></span></font><font size=2> ファイル選択</font></span>
 <input type=file class=file style="display:none">
 </div>
 </div>
 <div style="margin:10px;text-align:center">
-<button class=sendBt type="button" class="btn btn-default" disabled style="width:50%" data-quiet-send-button data-quiet-sending-text="Sending...">Start Encode</button>
+<button class=sendBt type="button" class="btn btn-default" disabled style="width:50%" data-quiet-send-button data-quiet-sending-text="送信中...">音声エンコード開始</button>
 <div>
 <font size=2>
-<label><input type=checkbox class=loop>Loop</label>
+<label><input type=checkbox class=loop>ループ処理</label>
 </font>
 </div>
 </div>
@@ -95,28 +92,25 @@ a{color: #0876c8;}
 <div class="hidden" data-quiet-profile-name="audible"></div>
 <div class="wrapper">
 <header>
-<h2>2.Recieve<recvbyte class=byte></recvbyte></h2>
+<h2>2.受信：<recvbyte class=byte></recvbyte></h2>
 </header>
 <section>
 <div class="hidden" data-quiet-warning></div>
-<textarea readonly placeholder="Received text(Read Only)" class=recv cols=50 rows=10 data-quiet-receive-text-target></textarea>
+<textarea placeholder="マイクで受信したデータがここに入るよ" class=recv cols=50 rows=10 data-quiet-receive-text-target></textarea>
 </section>
 </div>
-<!--<div align=right><button class=clearButton>Clear</button></div>-->
-
-<div><font size=2>* The data received by the microphone on here</font></div>
-
-<h2>3.DownLoad:<recvbyte class=byte></recvbyte></h2>
+<div><font size=2>※マイクで音を拾うとここに入る↑</font></div>
+<h2>3.ダウソロード：<recvbyte class=byte></recvbyte></h2>
 <center>
-<div style="margin-top:20px"><button class=download type=button><span class="fas fa-download"></span>DownLoad</button></div>
-<font size=2>* Click when the "Recieve" process is completed</font>
+<div style="margin-top:20px"><button class=download type=button><span class="fas fa-download"></span>ダウンロード</button></div>
+<font size=2>※↑処理完了後、ファイル化できる</font>
 </center>
 </div>
 </center>
 
 <footer style="margin-top:100px;background:#eee;padding:30px;border-radius:3px">
 <div>
-<center>Englsh / <a href=index_jp.html>日本語</a></center>
+<center><a href=index.html>Englsh</a> / 日本語</center>
 <div>
 OpenSource:
 <a href=https://github.com/satorunet/quiet-js/>GitHub</a> | <a href=https://satorunet.github.io/quiet-js/>Demo</a>
@@ -131,7 +125,6 @@ v5(github)
 Original: <a target="_blank" href="https://github.com/quiet/quiet-js/">quiet-js</a>
 (<a href="https://quiet.github.io/quiet-js/docs/Quiet.html" target="_blank">Docs</a>)
 </footer>
-
 
 </body>
 </html>

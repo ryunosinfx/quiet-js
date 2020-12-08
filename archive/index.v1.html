@@ -10,14 +10,11 @@ body {font-family: sans-serif ;}
 <meta http-equiv="X-UA-Compatible" content="chrome=1">
 <title>text2audio sample</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="/quiet/quiet.js?v11607393330"></script>
-<script async type="text/javascript" src="/quiet/quiet-emscripten.js?v3"></script>
+<script type="text/javascript" src="/quiet-js/lib/quiet-js/quiet.js"></script>
+<script async type="text/javascript" src="/quiet-js/lib/quiet-js/quiet-emscripten.js?v3"></script>
 </head>
 <body>
 <h1>audio2text sample</h2>
-<div>
-text版 | <a href=/index.v2.cgi>file版</a>
-</div>
 <a href=?>すべて</a> |
 <a href=?page=r>受信のみ</a> |
 <a href=?page=s>送信のみ</a>
@@ -31,9 +28,9 @@ $(function(){
 
 	return (function() {
     Quiet.init({
-        profilesPrefix: "/quiet/",
-        memoryInitializerPrefix: "/quiet/",
-        libfecPrefix: "/quiet/"
+        profilesPrefix: "/quiet-js/lib/quiet-js/",
+        memoryInitializerPrefix: "/quiet-js/lib/quiet-js//",
+        libfecPrefix: "/quiet-js/lib/quiet-js/"
     });
     var btn;
     var textbox;
@@ -152,9 +149,9 @@ function recvInit(){
 
 (function() {
     Quiet.init({
-        profilesPrefix: "/quiet/",
-        memoryInitializerPrefix: "/quiet/",
-        libfecPrefix: "/quiet/"
+        profilesPrefix: "/quiet-js/lib/quiet-js/",
+        memoryInitializerPrefix: "/quiet-js/lib/quiet-js/",
+        libfecPrefix: "/quiet-js/lib/quiet-js/"
     });
     var target;
     var content = new ArrayBuffer(0);

@@ -24,9 +24,9 @@ a[target="_blank"]:after {
 <script>
 $(function(){
 	$.when(
-		$.getScript( "lib/quiet-js/quiet.js" ),
-		$.getScript( "lib/quiet-js/quiet-emscripten.js" ),
-		$.getScript( "lib/main.js" ),
+		$.getScript( "/quiet-js/lib/quiet-js/quiet.js" ),
+		$.getScript( "/quiet-js/lib/quiet-js/quiet-emscripten.js" ),
+		$.getScript( "/quiet-js/lib/main.js" ),
 		$.Deferred(function( deferred ){
 			$( deferred.resolve );
 		})
