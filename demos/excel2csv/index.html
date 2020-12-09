@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+<head>
+<style>
+
+.box{display:inline-block;vertical-align:top;text-align:left} 
+  
+body {font-family: sans-serif ;}
+
+a[target="_blank"]:after {
+	font-family: 'Font Awesome 5 Free';
+	content: '\f35d';
+	font-size: 0.9em;
+	margin: 0px 3px;
+	font-weight: 900;
+}
+
+.menu-selected{background:#FFFFDD}
+.lang-selected{background:#EEEEFF}
+
+h2{border-left:10px solid #ccccff;padding-left:5px;text-align:left}
+a{color: #0876c8;}
+
+.byte{font-size:12pt}
+.sub{font-size:9pt}
+
+.dropOver{background:#EEF;border:3px solid dotte}
+
+</style>
+<meta name="viewport" content="width=device-width,initial-scale=0.8,user-scalable=yes">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="chrome=1">
+<title>file2audio demo</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="md5.js"></script>
+
+<script>
+$(function(){
+//	$("body").append('<script type="module" src="FFT.js?'+new Date().getTime()+'"></'+'script>');
+})
+
+$(function(){
+	$.when(
+		$.getScript( "/quiet-js/lib/quiet-js/quiet.js" ),
+		$.getScript( "/quiet-js/lib/quiet-js/quiet-emscripten.js" ),
+		$.getScript( "main.js" ),
+		$.Deferred(function( deferred ){
+			$( deferred.resolve );
+		})
+	).done(function(){
+		show_MICAlert();
+	});
+});
+
+$(function(){
+
+	var bt = $("<button>x</button>");
+
+	$("body").append(bt);
+
+	bt.click(function(){
+		$("body").trigger("hoge");
+
+	})
+
+})
+
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
+
+</head>
+<body>
+
+
+
+<h1 style="border-left:10px solid #ff9900;padding:3px;margin-top:0px;margin-bottom:5px;background:#000;color:white;padding:3px">
+Excel2Audio demo</h2>
+<div>
+<center>
+<a value="all" class="menu menu-selected" href=#>ALL</a> |
+<a value="send" class="menu" href=#>Send ONLY</a> |
+<a value="recv" class="menu" href=#>Recieve ONLY</a>
+</center>
+</div>
+
+<center>
+
+<div class="box box-send" class="drop_area">
+<div class="hidden" data-quiet-profile-name="audible"></div>
+<div class="wrapper">
+<header>
+<h2>1.Send:</h2>
+<div class=byte><sendbyte></sendbyte>&nbsp;</div>
+</header>
+<section>
+<div class="hidden" data-quiet-warning></div>
+<div class="form-group">
+<textarea placeholder="Input Excel Copy&Paste Here" class=send_tt autocapitalize="none" autocomplete="off" spellcheck="off" class="form-control" style="resize:none" rows="10" cols=50></textarea>
+<input type=hidden class=send_tt_real data-quiet-text-input></textarea>
+<input type=hidden class="quiet_start_button_real" data-quiet-send-button>
+<div>
+</div>
+</div>
+
+<div style="margin:10px;text-align:center">
+<button type="button" class="btn btn-default quiet_start_button sendBt" disabled style="width:50%" data-quiet-sending-text="Sending...">Start Encode</button>
+</div>
+</section>
+</div>
+
+<style>
+.preview_table{
+color:#555;font-size:8pt;max-height:300px;max-width:350px;overflow:scroll;background:#eee;padding:5px}
+.preview_table > table {background:white;border:0.1px solid #DDD;border-color:#DDD}
+
+ok{color:green}
+ng{color:red}
+
+.byte{font-size:9pt}
+
+</style>
+
+<font size=1>Preview-Table:</font>
+<div class="preview_table preview_send"></div>
+
+</div>
+<div class="box box-recv">
+<div class="hidden" data-quiet-profile-name="audible"></div>
+<div class="wrapper">
+<header>
+<h2>2.Recieve</h2>
+<div class="byte recvbyte"><recvbyte></recvbyte>&nbsp;</div>
+</header>
+
+<style>
+.graph_wrap_big{
+	text-align:left;font-size:0px;background:#bbb;width:50px;height:12px;display:inline-block;vertical-align:middle;
+}
+
+
+.graph_wrap{
+	text-align:left;font-size:0px;background:#bbb;width:30px;height:10px;display:inline-block;vertical-align:middle;
+}
+
+.inner_graph{
+	height:100%;display:inline-block
+}
+
+.inner_graph.a{background:#00CC00}
+.inner_graph.n{background:#CCCC00}
+.inner_graph.d{background:#CC0000}
+.inner_graph.b{background:#bbb}
+
+.bar_graph{cursor:pointer}
+
+.top_graph{top:-10;position:relative;margin-right:5px;}
+
+</style>
+
+
+
+<section>
+<div class="hidden" data-quiet-warning></div>
+<textarea readonly placeholder="Received text" class="recv_tt" cols=50 rows=10 data-quiet-receive-text-target></textarea>
+
+<div style="margin:10px;text-align:center">
+<button style="width:150px" disabled class=download type=button><span class="fas fa-download"></span>DownLoad</button>
+&nbsp;
+<button class=clearButton>Clear</button>
+</div>
+
+</section>
+</div>
+
+<font size=1>Preview-Table:</font>
+<div class="preview_table preview_recv"></div>
+</div>
+
+
+<footer style="margin-top:100px;background:#eee;padding:30px;border-radius:3px">
+<div>
+<center>
+<div style="padding:10px">
+<b>About Excel2Audio</b>
+<div style="padding:30px;font-size:20pt">
+
+<span class="fas fas fa-file-excel"></span>
+<font size=2><span class="fas fa-arrow-right"></span></font>
+
+<span style="color:red" class="fas fa-volume-up"></span>
+<font size=2><span class="fas fa-arrow-right"></span></font>
+
+<span style="color:red" class="fas fa-microphone"></span>
+<font size=2><span class="fas fa-arrow-right"></span></font>
+
+
+<span class="fas fas fa-file-csv"></span>
+</div>
+
+</div>
+
+<div>
+OpenSource:
+<a href=https://github.com/satorunet/quiet-js/>GitHub</a> | <a href=https://satorunet.github.io/quiet-js/>Demo</a>
+</div>
+Archive:
+<a href=archive/index.v1.html>text(v1)</a> |
+<a href=archive/index.v2.html>file(v2)</a> |
+<a href=archive/index.v3.html>v3(Design＋)</a> |
+<a href=archive/index.v4.html>v4(fullStatic)</a> |
+v5(github)
+</div>
+Original: <a target="_blank" href="https://github.com/quiet/quiet-js/">quiet-js</a>
+(<a href="https://quiet.github.io/quiet-js/docs/Quiet.html" target="_blank">Docs</a>)
+</footer>
+
+
+</body>
+</html>
